@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+service MyService {
+  rpc SendMessage (MessageRequest) returns (MessageResponse);
+  rpc SendCompra (Compra) returns (MessageResponse);
+}
+
+message MessageRequest {
+  string message = 1;
+}
+
+message MessageResponse {
+  string response = 1;
+}
+
+message Compra {
+  string nombre_producto = 1;
+  double precio = 2;
+  string pasarela_pago = 3;
+  string marca_tarjeta = 4;
+  string banco = 5;
+  string region = 6;
+  string direccion = 7;
+  string correo = 8;
+}
