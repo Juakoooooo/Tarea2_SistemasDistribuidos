@@ -6,19 +6,16 @@ import json
 import time
 from datetime import datetime
 
-# Configura el Consumer para conectarse a los brokers
 consumer_conf = {
     'bootstrap.servers': 'localhost:9093',
     'group.id': 'grupo-consumidor1',
-    'auto.offset.reset': 'earliest'  # Empieza desde el principio si no hay un offset guardado
+    'auto.offset.reset': 'earliest' 
 }
 consumer = Consumer(consumer_conf)
 consumer.subscribe(['el-topico1'])
 
-# Configura la conexión a Elasticsearch
 es = Elasticsearch([{'host': 'localhost', 'port': 9200, 'scheme': 'http'}])
 
-# Función para registrar métricas en Elasticsearch
 def registrar_metrica(metrica, valor, compra_id):
     metric_data = {
         "timestamp": datetime.utcnow(),
@@ -28,19 +25,17 @@ def registrar_metrica(metrica, valor, compra_id):
     }
     es.index(index="metrics-index", document=metric_data)
 
-# Función para definir tiempos de espera según la carga
 def obtener_tiempo_espera(carga_trabajo):
     if carga_trabajo == "baja":
-        return 1  # Tiempo en segundos para carga baja
+        return 1 
     elif carga_trabajo == "media":
-        return 2  # Tiempo en segundos para carga media
+        return 2  
     elif carga_trabajo == "alta":
-        return 5  # Tiempo en segundos para carga alta
+        return 5  
     else:
-        return 3  # Tiempo por defecto si no se especifica la carga
+        return 3  
 
-# Determina la carga de trabajo (puedes cambiar esto manualmente o programarlo)
-carga_trabajo = "alta"  # Cambia a "baja", "media" o "alta" según sea necesario
+carga_trabajo = "alta"  
 tiempo_espera = obtener_tiempo_espera(carga_trabajo)
 
 try:
@@ -48,7 +43,7 @@ try:
     mensajes_procesados = 0
 
     while True:
-        msg = consumer.poll(timeout=1.0)  # Espera 1 segundo por mensajes
+        msg = consumer.poll(timeout=1.0) 
         if msg is None:
             continue
         if msg.error():
@@ -69,24 +64,19 @@ try:
                 "Correo": message["correo"]
             }
 
-            # Indexamos el documento en Elasticsearch con un índice específico
             es.index(index="compras-index", document=document)
             print(f"Mensaje recibido e indexado en Elasticsearch: {document}")
 
-            # Calcular y registrar la latencia
             latencia = time.time() - processing_start
-            compra_id = msg.key().decode('utf-8')  # Utilizar la key como ID de la compra
+            compra_id = msg.key().decode('utf-8')  
             registrar_metrica("latencia", latencia, compra_id)
 
-            # Incrementar el contador de mensajes procesados
             mensajes_procesados += 1
             elapsed_time = time.time() - start_time
 
-            # Calcular y registrar el throughput
             throughput = mensajes_procesados / elapsed_time
             registrar_metrica("throughput", throughput, compra_id)
 
-            # Simular tiempo variable de procesamiento según la carga
             time.sleep(tiempo_espera)
 
         except json.JSONDecodeError as e:
@@ -105,16 +95,14 @@ finally:
 #import smtplib
 #from email.mime.text import MIMEText
 #
-## Configura el Consumer para conectarse a los brokers
 #consumer_conf = {
 #    'bootstrap.servers': 'localhost:9093',
 #    'group.id': 'grupo-consumidor1',
-#    'auto.offset.reset': 'earliest'  # Empieza desde el principio si no hay un offset guardado
+#    'auto.offset.reset': 'earliest'  
 #}
 #consumer = Consumer(consumer_conf)
 #consumer.subscribe(['el-topico1'])
 #
-## Configura la conexión a Elasticsearch
 #es = Elasticsearch([{'host': 'localhost', 'port': 9200, 'scheme': 'http'}])
 #
 ## Configuración del SMTP para enviar correos
@@ -135,7 +123,6 @@ finally:
 #    except Exception as e:
 #        print(f"Error enviando correo: {e}")
 #
-## Máquina de estados con un diccionario
 #def maquina_estados(compra_id, destinatario):
 #    estados = {
 #        "Procesando": "Preparación",
@@ -167,7 +154,6 @@ finally:
 #            print(f"Consumer error: {msg.error()}")
 #            continue
 #        
-#        # Deserializamos el mensaje y lo indexamos en Elasticsearch
 #        try:
 #            message = json.loads(msg.value().decode('utf-8'))
 #            document = {
@@ -181,11 +167,9 @@ finally:
 #                "Correo": message["correo"]
 #            }
 #
-#            # Indexamos el documento en Elasticsearch con un índice específico
 #            es.index(index="compras-index", document=document)
 #            print(f"Mensaje recibido e indexado en Elasticsearch: {document}")
 #
-#            # Ejecutar la máquina de estados para la compra recibida
 #            compra_id = msg.key().decode('utf-8')  # Utilizar la key como ID de la compra
 #            destinatario = "doe933331@gmail.com"
 #            maquina_estados(compra_id, destinatario)
