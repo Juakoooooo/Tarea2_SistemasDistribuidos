@@ -56,3 +56,5 @@ services:
 volumes:
   kafka_data1:
     driver: local
+  kibana_data:
+    driver: local
