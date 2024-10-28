@@ -7,7 +7,7 @@ Este proyecto implementa un sistema distribuido no monolítico para gestionar el
 - 🐋 Docker y Docker Compose
 - 🐍 Python 3.8 o superior
 
-### 📦 Instalación de Dependencias
+## 📦 Instalación de Dependencias
 
 Ejecuta los siguientes comandos para instalar las dependencias necesarias:
 
@@ -99,6 +99,33 @@ carga_trabajo = "alta"
 ```
 
 a "media" o "baja" para simular diferentes condiciones de carga.
+
+## Kibana 📊
+
+Para conectarse a Kibana y visualizar las métricas y datos relacionados con los pedidos, se deben seguir los siguientes pasos:
+
+1. Una vez ejecutado el proyecto, nos dirigimos al localhost, en el puerto 5601.
+   [**kibana**](http://localhost:5601/app/home#/)
+   ![Homepage de Kibana](images/kibanahomepage.png)
+
+2. Luego nos dirigimos al apartado de **dashboard**
+   ![Dashboard](images/dashboard.png)
+
+3. Nos pedira crear *index pattern*, lo hacemos con los dos index mandados por kafka: **compras-index** y **metrics-index**.
+    ![Crear index pattern](images/createindex.png)
+    ![Índices creados](images/indexcreated.png)
+
+4. Luego en el dashboard, creamos una visualización:
+   ![Visualización](images/visualizacion.png)
+
+5. Finalmente, para consultar datos respecto a los pedidos podemos elegir algún campo en particular, seleccionar el tipo de gráfico y configuraciones relacionadas con la información que muestra el gráfico
+   ![Grafico bancos](images/bank.png)
+
+Por otro lado, si queremos analizar las métricas como *latencia* o *throughput*, seleccionamos el filtro, determinamos el campo **metrica** y le asignamos el valor que nosotros queramos analizar (en este caso, latencia).
+    ![Filtro de index metrics](images/metricsfilter.png)
+
+Se mostrará lo siguiente (notar que se seleccionó como funcion **Average**):
+    ![latencia average](images/latency.png)
 
 ## 📚 Referencias
 
