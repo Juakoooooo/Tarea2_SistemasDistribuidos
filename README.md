@@ -17,7 +17,7 @@ sudo pip install grpcio grpcio-tools confluent-kafka elasticsearch
 
 ### ⚙️ Configuracion del entorno
 
-1. Clonamos el repositorio de Don Joaquín y nos dirigimos a la carpeta root del repositorio.
+1. Clonamos el repositorio y nos dirigimos a la carpeta root del repositorio.
 
     ```bash
     sudo git clone https://github.com/Juakoooooo/Tarea2_SistemasDistribuidos.git
